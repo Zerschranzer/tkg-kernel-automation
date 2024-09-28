@@ -109,7 +109,7 @@ if [ "$LATEST_KERNEL" != "$LAST_KERNEL" ]; then
     cd $TKG_KERNEL_DIR
 
     # Compile kernel (don't install)
-    makepkg -s
+    nice -n 19 makepkg -s
 
     # Check if compilation was successful
     if [ $? -eq 0 ]; then
