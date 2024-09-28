@@ -9,18 +9,46 @@ CUSTOMIZATION_CFG="$TKG_KERNEL_DIR/customization.cfg"  # Path to customization.c
 LAST_KERNEL_FILE="/srv/http/tkg/last_kernel_version.txt"  # File to store the last kernel version
 
 # Variables for settings in customization.cfg
-DISTRO="Arch"
-FORCE_ALL_THREADS="true"
-MENUNCONFIG="false"
-CPUSCHED="pds"
-COMPILER="gcc"
+DISTRO="Arch"  # options are "Arch", "Ubuntu", "Debian", "Fedora", "Suse", "Gentoo", "Generic".
+
+FORCE_ALL_THREADS="true"  # options are "true", "false"
+
+MENUNCONFIG="false"  # keep "false", for non interactive installation
+
+CPUSCHED="pds"  # Options are "pds", "bmq", "cacule", "tt", "bore", "bore-eevdf", "echo", "cfs" (linux 6.5-) or "eevdf"
+
+COMPILER="gcc"  # this script just suports "gcc"
+
+# CPU sched_yield_type - Choose what sort of yield sched_yield will perform
+# For PDS and MuQSS: 0: No yield. (Recommended option for gaming on PDS and MuQSS)
+#                    1: Yield only to better priority/deadline tasks. (Default - can be unstable with PDS on some platforms)
+#                    2: Expire timeslice and recalculate deadline. (Usually the slowest option for PDS and MuQSS, not recommended)
+# For BMQ:           0: No yield.
+#                    1: Deboost and requeue task. (Default)
+#                    2: Set rq skip task.
 SCHED_YIELD_TYPE="0"
-RR_INTERVAL="2"
-TICKLESS="2"
-ACS_OVERRIDE="false"
+
+RR_INTERVAL="2"  # Set to "1" for 2ms, "2" for 4ms, "3" for 6ms, "4" for 8ms, or "default" to keep the chosen scheduler defaults.
+
+TICKLESS="2"  # Set to "0" for periodic ticks, "1" to use CattaRappa mode (enabling full tickless) and "2" for tickless idle only.
+
+ACS_OVERRIDE="false"  # options are "true", "false"
+
+# AMD CPUs : "k8" "k8sse3" "k10" "barcelona" "bobcat" "jaguar" "bulldozer" "piledriver" "steamroller" "excavator" "zen" "zen2" "zen3" "zen4" "zen5" (zen3 opt support depends on GCC11) (zen4 opt support depends on GCC13) 
+#(zen5 opt support depends on GCC14 or CLANG 19.1)
+# Intel CPUs : "mpsc"(P4 & older Netburst based Xeon) "atom" "core2" "nehalem" "westmere" "silvermont" "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" "skylakex" "cannonlake" "icelake" "goldmont" "goldmontplus" 
+#"cascadelake" "cooperlake" "tigerlake" "sapphirerapids" "rocketlake" "alderlake" "raptorlake" "meteorlake" (raptorlake and meteorlake opt support require GCC13)
+# Other options :
+# - "native_amd" (use compiler autodetection - Selecting your arch manually in the list above is recommended instead of this option)
+# - "native_intel" (use compiler autodetection - Selecting your arch manually in the list above is recommended instead of this option)
+# - "generic" (kernel's default - to share the package between machines with different CPU µarch as long as they are x86-64)
 PROCESSOR_OPT="zen4"
+
+# Timer frequency - "100" "250" "300" "500" "750" "1000" ("2000" is available for cacule cpusched only, "625" is available for echo cpusched only)  
+# More options available in kernel config prompt when left empty depending on selected cpusched with the default option pointed with a ">" (2000 for cacule, 100 for muqss, 625 for echo and 1000 for other cpu schedulers)
 TIMER_FREQ="1000"
-DEFAULT_CPU_GOV="ondemand"
+
+DEFAULT_CPU_GOV="ondemand"  # # Default CPU governor - "performance", "ondemand", "schedutil" or leave empty for default (schedutil)
 
 # Choice between Stable and Mainline
 KERNEL_TYPE="mainline"  # Set to "stable" for the latest stable version or "mainline" for the latest mainline version
