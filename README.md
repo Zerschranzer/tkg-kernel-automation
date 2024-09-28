@@ -26,7 +26,30 @@ The automation script checks for new kernel versions daily, compiles them with T
    sudo chown $USER:$USER /srv/http/kernel-repo
    ```
 
-3. Configure Nginx:
+3. **Set permissions for the TKG and repository directories**:
+   
+   Since the directories are outside of your home folder, ensure that your user has the necessary permissions to access and modify the files. Use the following commands to change the ownership and permissions:
+
+   ```bash
+   sudo chown -R $USER:$USER /srv/http/tkg /srv/http/kernel-repo
+   sudo chmod -R 755 /srv/http/tkg /srv/http/kernel-repo
+   ```
+
+   If Nginx needs to access the repository, ensure it has read access:
+   
+   ```bash
+   sudo chown -R http:http /srv/http/kernel-repo
+   sudo chmod -R 755 /srv/http/kernel-repo
+   ```
+
+   Alternatively, to allow both your user and Nginx to access the repository:
+
+   ```bash
+   sudo chown -R $USER:http /srv/http/kernel-repo
+   sudo chmod -R 775 /srv/http/kernel-repo
+   ```
+
+4. Configure Nginx:
    Edit `/etc/nginx/nginx.conf` and add:
    ```nginx
    server {
@@ -39,13 +62,13 @@ The automation script checks for new kernel versions daily, compiles them with T
    }
    ```
 
-4. Start and enable Nginx:
+5. Start and enable Nginx:
    ```bash
    sudo systemctl start nginx
    sudo systemctl enable nginx
    ```
 
-5. Clone this repository, and edit the script for your needs:
+6. Clone this repository, and edit the script for your needs:
    ```bash
    git clone https://github.com/zerschranzer/tkg-kernel-automation.git
    cd tkg-kernel-automation
