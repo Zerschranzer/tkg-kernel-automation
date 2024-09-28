@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Variables for paths
-TKG_KERNEL_DIR="/home/timo/tkg/linux-tkg"  # Path to TKG kernel directory
-REPO_DIR="/home/timo/localerepo/repo"  # Path to repository directory
-REPO_NAME="localerepo"  # Name of the repository
+TKG_KERNEL_DIR="/srv/http/tkg/linux-tkg"  # Path to TKG kernel directory
+REPO_DIR="/srv/http/kernel-repo"  # Path to repository directory
+REPO_NAME="customkernel"  # Name of the repository
 KERNEL_ORG_URL="https://www.kernel.org"  # URL of kernel.org
 CUSTOMIZATION_CFG="$TKG_KERNEL_DIR/customization.cfg"  # Path to customization.cfg file
-LAST_KERNEL_FILE="/home/timo/tkg/last_kernel_version.txt"  # File to store the last kernel version
+LAST_KERNEL_FILE="/srv/http/tkg/last_kernel_version.txt"  # File to store the last kernel version
 
 # Variables for settings in customization.cfg
 DISTRO="Arch"
