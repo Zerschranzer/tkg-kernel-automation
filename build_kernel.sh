@@ -42,7 +42,7 @@ ACS_OVERRIDE="false"  # options are "true", "false"
 # - "native_amd" (use compiler autodetection - Selecting your arch manually in the list above is recommended instead of this option)
 # - "native_intel" (use compiler autodetection - Selecting your arch manually in the list above is recommended instead of this option)
 # - "generic" (kernel's default - to share the package between machines with different CPU µarch as long as they are x86-64)
-PROCESSOR_OPT="zen4"
+PROCESSOR_OPT="generic"
 
 # Timer frequency - "100" "250" "300" "500" "750" "1000" ("2000" is available for cacule cpusched only, "625" is available for echo cpusched only)  
 # More options available in kernel config prompt when left empty depending on selected cpusched with the default option pointed with a ">" (2000 for cacule, 100 for muqss, 625 for echo and 1000 for other cpu schedulers)
