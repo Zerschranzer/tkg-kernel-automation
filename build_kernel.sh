@@ -51,7 +51,7 @@ TIMER_FREQ="1000"
 DEFAULT_CPU_GOV="ondemand"  # # Default CPU governor - "performance", "ondemand", "schedutil" or leave empty for default (schedutil)
 
 # Choice between Stable and Mainline
-KERNEL_TYPE="mainline"  # Set to "stable" for the latest stable version or "mainline" for the latest mainline version
+KERNEL_TYPE="stable"  # Set to "stable" for the latest stable version or "mainline" for the latest mainline version
 
 # Function to get the latest Mainline version from kernel.org
 get_latest_mainline_version() {
