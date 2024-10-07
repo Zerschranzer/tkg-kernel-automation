@@ -14,7 +14,7 @@ FORCE_ALL_THREADS="true"  # options are "true", "false"
 
 MENUNCONFIG="false"  # keep "false", for non interactive installation
 
-CPUSCHED="eevdf"  # Options are "pds", "bmq", "cacule", "tt", "bore", "bore-eevdf", "echo", "cfs" (linux 6.5-) or "eevdf"
+CPUSCHED="pds"  # Options are "pds", "bmq", "cacule", "tt", "bore", "bore-eevdf", "echo", "cfs" (linux 6.5-) or "eevdf"
 
 COMPILER="gcc"  # this script just suports "gcc"
 
@@ -53,8 +53,36 @@ DEFAULT_CPU_GOV="performance"  # # Default CPU governor - "performance", "ondema
 # !!! Not available on Project C schedulers (PDS & BMQ) due to disabled PSI on those !!!
 WAYDROID="false"
 
+# compiler optimization level - 1. Optimize for performance (-O2); 2. Optimize harder (-O3); 3. Optimize for size (-Os) - Kernel default is "1"
+COMPILER_OPTLEVEL="2"
+
+# TT only - Enable High HZ patch (available for 5.15 only) - Default is "false"
+TT_HIGH_HZ="true"
+
+# Use an aggressive ondemand governor instead of default ondemand to improve performance on low loads/high core count CPUs while keeping some power efficiency from frequency scaling.
+# It still requires you to either set ondemand as default governor or to select it in some way at runtime.
+AGGRESSIVE_ONDEMAND="false"
+
+# [Advanced] Default TCP IPv4 algorithm to use. Options are: "yeah", "bbr", "cubic", "reno", "vegas" and "westwood". Leave empty if unsure.
+# This config option will not be prompted
+# Can be changed at runtime with the command line `# echo "$name" > /proc/sys/net/ipv4/tcp_congestion_control` where $name is one of the options above.
+# Default (empty) and fallback : cubic
+TCP_CONG_ALG="bbr"
+
+# You can pass a default set of kernel command line options here - example: "intel_pstate=passive nowatchdog amdgpu.ppfeaturemask=0xfffd7fff mitigations=off"
+CUSTOM_COMMANDLINE=""
+
+# Set to "true" to enable support for futex2, a DEPRECATED interface that can be used by proton-tkg and proton 5.13 experimental through Fsync - Can be enabled alongside fsync legacy to use it as a fallback
+# https://gitlab.collabora.com/tonyk/linux/-/tree/futex2-dev
+# ! Only affect 5.10-5.14 kernel branches. Safely ignored for 5.15 or newer !
+# ! required _fsync_backport="false" !
+FSYNC_FUTEX2="true"
+
+FSYNC_BACKPORT="true"
+FSYNC_LEGACY="true"
+
 # Choice between Stable and Mainline
-KERNEL_TYPE="mainline"  # Set to "stable" for the latest stable version or "mainline" for the latest mainline version
+KERNEL_TYPE="stable"  # Set to "stable" for the latest stable version or "mainline" for the latest mainline version
 
 # Function to get the latest Mainline version from kernel.org
 get_latest_mainline_version() {
@@ -108,6 +136,14 @@ if [ "$LATEST_KERNEL" != "$LAST_KERNEL" ]; then
     sed -i "s/^_timer_freq=.*/_timer_freq=\"$TIMER_FREQ\"/" $CUSTOMIZATION_CFG
     sed -i "s/^_default_cpu_gov=.*/_default_cpu_gov=\"$DEFAULT_CPU_GOV\"/" $CUSTOMIZATION_CFG
     sed -i "s/^_waydroid=.*/_waydroid=\"$WAYDROID\"/" $CUSTOMIZATION_CFG
+    sed -i "s/^_compileroptlevel=.*/_compileroptlevel=\"$COMPILER_OPTLEVEL\"/" $CUSTOMIZATION_CFG
+    sed -i "s/^_tt_high_hz=.*/_tt_high_hz=\"$TT_HIGH_HZ\"/" $CUSTOMIZATION_CFG
+    sed -i "s/^_aggressive_ondemand=.*/_aggressive_ondemand=\"$AGGRESSIVE_ONDEMAND\"/" $CUSTOMIZATION_CFG
+    sed -i "s/^_tcp_cong_alg=.*/_tcp_cong_alg=\"$TCP_CONG_ALG\"/" $CUSTOMIZATION_CFG
+    sed -i "s/^_custom_commandline=.*/_custom_commandline=\"$CUSTOM_COMMANDLINE\"/" $CUSTOMIZATION_CFG
+    sed -i "s/^_fsync_futex2=.*/_fsync_futex2=\"$FSYNC_FUTEX2\"/" $CUSTOMIZATION_CFG
+    sed -i "s/^_fsync_backport=.*/_fsync_backport=\"$FSYNC_BACKPORT\"/" $CUSTOMIZATION_CFG
+    sed -i "s/^_fsync_legacy=.*/_fsync_legacy=\"$FSYNC_LEGACY\"/" $CUSTOMIZATION_CFG
 
     # Change to TKG kernel directory
     cd $TKG_KERNEL_DIR
